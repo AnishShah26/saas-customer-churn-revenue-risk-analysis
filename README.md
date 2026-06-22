@@ -3,8 +3,8 @@
 ## Project Status
 
 **Status:** Work in Progress
-**Current Stage Completed:** SQL data loading, data quality checks and churn analysis
-**Next Stages:** Revenue-at-risk SQL analysis, Python analysis and Power BI dashboard development
+**Current Stage Completed:** SQL data loading, data quality checks, churn analysis and revenue-at-risk analysis
+**Next Stages:** Python analysis and Power BI dashboard development
 
 ## Project Overview
 
@@ -111,6 +111,23 @@ File used:
 
 ```text
 sql/03_churn_analysis.sql
+```
+### 5. Revenue-at-Risk Analysis
+
+SQL queries were used to analyse:
+
+* Total revenue by churn status
+* Monthly and annual revenue at risk
+* Revenue at risk by plan tier
+* Revenue at risk by industry
+* Revenue at risk by referral source
+* Average revenue by plan tier and churn status
+* High-value churned accounts
+
+File used:
+
+```text
+sql/04_revenue_risk_analysis.sql
 ```
 
 ## Data Quality Findings
@@ -231,6 +248,108 @@ This suggests that each plan tier requires a different retention strategy. Basic
 6. The top churn reason is **features**, followed by **budget** and **support**.
 7. Retention strategy should be segmented by plan tier, acquisition source and industry.
 
+## Revenue-at-Risk Analysis
+
+### 8. Total Revenue by Churn Status
+
+![Total Revenue by Churn Status](reports/screenshots/08_total_revenue_by_churn_status.png)
+
+Churned subscriptions represent **$1,179,139 in monthly revenue at risk** and **$14,149,668 in annual revenue at risk**.
+
+This shows that churn is not only a customer retention issue, but also a significant recurring revenue risk.
+
+### 9. Revenue-at-Risk Summary
+
+![Revenue-at-Risk Summary](reports/screenshots/09_revenue_at_risk_summary.png)
+
+The total revenue-at-risk from churned accounts is:
+
+| Metric                                     |       Value |
+| ------------------------------------------ | ----------: |
+| Accounts with Churned Subscription Records |         312 |
+| Monthly Revenue at Risk                    |  $1,179,139 |
+| Annual Revenue at Risk                     | $14,149,668 |
+
+This highlights the financial impact of churn and provides a clear business case for retention initiatives.
+
+### 10. Revenue-at-Risk by Plan Tier
+
+![Revenue-at-Risk by Plan Tier](reports/screenshots/10_revenue_at_risk_by_plan_tier.png)
+
+| Plan Tier  | Churned Accounts | Monthly Revenue at Risk | Annual Revenue at Risk |
+| ---------- | ---------------: | ----------------------: | ---------------------: |
+| Enterprise |              146 |                $926,345 |            $11,116,140 |
+| Pro        |              141 |                $180,271 |             $2,163,252 |
+| Basic      |              132 |                 $72,523 |               $870,276 |
+
+The **Enterprise** segment contributes the largest revenue risk, with over **$11.1 million ARR at risk**.
+
+Although churn rates were similar across plans, Enterprise churn has a much larger revenue impact because Enterprise customers generate higher recurring revenue.
+
+### 11. Revenue-at-Risk by Industry
+
+![Revenue-at-Risk by Industry](reports/screenshots/11_revenue_at_risk_by_industry.png)
+
+| Industry      | Churned Accounts | Monthly Revenue at Risk | Annual Revenue at Risk |
+| ------------- | ---------------: | ----------------------: | ---------------------: |
+| Cybersecurity |               65 |                $279,062 |             $3,348,744 |
+| FinTech       |               55 |                $253,446 |             $3,041,352 |
+| DevTools      |               80 |                $238,611 |             $2,863,332 |
+| HealthTech    |               68 |                $209,277 |             $2,511,324 |
+| EdTech        |               44 |                $198,743 |             $2,384,916 |
+
+The **Cybersecurity** segment has the highest annual revenue at risk at **$3.35 million**, even though DevTools had the highest churn rate.
+
+This shows why churn rate and revenue impact must be analysed together. A segment may not have the highest churn percentage, but it can still create the largest financial loss.
+
+### 12. Revenue-at-Risk by Referral Source
+
+![Revenue-at-Risk by Referral Source](reports/screenshots/12_revenue_at_risk_by_referral_source.png)
+
+| Referral Source | Churned Accounts | Monthly Revenue at Risk | Annual Revenue at Risk |
+| --------------- | ---------------: | ----------------------: | ---------------------: |
+| Other           |               65 |                $273,644 |             $3,283,728 |
+| Organic         |               78 |                $265,637 |             $3,187,644 |
+| Event           |               58 |                $260,954 |             $3,131,448 |
+| Ads             |               61 |                $194,077 |             $2,328,924 |
+| Partner         |               50 |                $184,827 |             $2,217,924 |
+
+The **Other**, **Organic** and **Event** referral sources create the largest revenue-at-risk exposure.
+
+Event-acquired customers also showed the highest churn rate, so this channel should be reviewed carefully for customer fit, onboarding quality and expectation-setting.
+
+### 13. Average Revenue by Plan and Churn Status
+
+![Average Revenue by Plan and Churn Status](reports/screenshots/13_average_revenue_by_plan_and_churn_status.png)
+
+Enterprise churned subscriptions have a higher average MRR than active Enterprise subscriptions.
+
+This suggests that some high-value Enterprise customers are churning, making Enterprise retention a priority for revenue protection.
+
+### 14. High-Value Churned Accounts
+
+![High-Value Churned Accounts](reports/screenshots/14_high_value_churned_accounts.png)
+
+The highest-value churned account lost **$623,268 ARR**, and all top 10 high-value churned accounts are from the Enterprise plan.
+
+This supports a targeted retention strategy focused on high-value Enterprise accounts before churn occurs.
+
+## Revenue-at-Risk Key Insights
+
+1. Churned subscriptions represent **$1.18 million MRR** and **$14.15 million ARR** at risk.
+2. Enterprise customers create the largest financial risk, with **$11.12 million ARR at risk**.
+3. Cybersecurity has the highest industry-level ARR risk at **$3.35 million**.
+4. Event-acquired customers show both high churn rate and high revenue exposure.
+5. High-value churned accounts are concentrated in the Enterprise plan.
+
+## Revenue Protection Recommendations
+
+1. Prioritise Enterprise retention because this plan contributes the largest ARR risk.
+2. Create an early-warning dashboard for high-value accounts showing churn signals, support issues and product usage decline.
+3. Review Cybersecurity and FinTech customers separately because they contribute high revenue exposure.
+4. Improve event-acquired customer onboarding to reduce both churn rate and revenue leakage.
+5. Build a customer success intervention plan for high-MRR accounts before renewal periods.
+
 ## Business Recommendations
 
 ### 1. Improve feature fit for DevTools customers
@@ -291,7 +410,14 @@ SaaS Customer Churn Revenue Risk Analysis
 │       ├── 04_churn_by_referral_source.png
 │       ├── 05_churn_by_seat_size_group.png
 │       ├── 06_top_churn_reasons.png
-│       └── 07_churn_reasons_by_plan_tier.png
+│       ├── 07_churn_reasons_by_plan_tier.png
+│       ├── 08_total_revenue_by_churn_status.png
+│       ├── 09_revenue_at_risk_summary.png
+│       ├── 10_revenue_at_risk_by_plan_tier.png
+│       ├── 11_revenue_at_risk_by_industry.png
+│       ├── 12_revenue_at_risk_by_referral_source.png
+│       ├── 13_average_revenue_by_plan_and_churn_status.png
+│       └── 14_high_value_churned_accounts.png
 │
 └── README.md
 ```
