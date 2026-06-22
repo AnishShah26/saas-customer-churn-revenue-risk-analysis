@@ -3,14 +3,14 @@
 ## Project Status
 
 **Status:** Work in Progress
-**Current Stage Completed:** SQL data loading, data quality checks, churn analysis and revenue-at-risk analysis
-**Next Stages:** Python analysis and Power BI dashboard development
+**Current Stage Completed:** SQL data loading, data quality checks, churn analysis, revenue-at-risk analysis and Python analysis
+**Next Stage:** Power BI dashboard development
 
 ## Project Overview
 
-This project analyses customer churn patterns for **RavenStack**, a synthetic SaaS business dataset. The goal is to identify high-risk customer segments, understand churn drivers and develop business recommendations to improve customer retention.
+This project analyses customer churn patterns for **RavenStack**, a synthetic SaaS business dataset. The goal is to identify high-risk customer segments, understand churn drivers, quantify revenue at risk and develop business recommendations to improve customer retention.
 
-The project currently uses **SQL, SQLite, Python for data loading, VS Code and Git/GitHub**. Power BI dashboard development will be added in the next stage.
+The project currently uses **SQL, SQLite, Python, VS Code and Git/GitHub**. Power BI dashboard development will be added in the next stage.
 
 ## Business Problem
 
@@ -22,15 +22,18 @@ RavenStack wants to understand why customers are leaving before its public launc
 * Which referral sources bring higher-churn customers?
 * Which customer seat-size groups churn the most?
 * What are the most common churn reasons?
-* How do churn reasons differ across plan tiers?
+* How much monthly and annual revenue is at risk from churn?
+* How do product usage and support experience differ between active and churned customers?
 
 ## Tools Used
 
 * **VS Code** – project development environment
 * **Git & GitHub** – version control and portfolio presentation
 * **SQLite** – local relational database
-* **SQL** – data quality checks and churn analysis
-* **Python** – CSV loading into SQLite
+* **SQL** – data quality checks, churn analysis and revenue-at-risk analysis
+* **Python** – CSV loading, analytical datasets, churn visualisations and insight summary
+* **Pandas** – data manipulation and aggregation
+* **Matplotlib** – Python chart outputs
 * **Power BI** – dashboard development planned for the next stage
 
 ## Dataset
@@ -112,6 +115,7 @@ File used:
 ```text
 sql/03_churn_analysis.sql
 ```
+
 ### 5. Revenue-at-Risk Analysis
 
 SQL queries were used to analyse:
@@ -130,6 +134,23 @@ File used:
 sql/04_revenue_risk_analysis.sql
 ```
 
+### 6. Python Analysis
+
+Python was used to extend the SQL analysis by creating account-level and subscription-level analytical datasets. The Python analysis focused on churn behaviour, product usage, support experience and business insight generation.
+
+File used:
+
+```text
+python/01_churn_usage_support_analysis.ipynb
+```
+
+Python outputs saved:
+
+```text
+reports/python_charts
+reports/python_insights_summary.csv
+```
+
 ## Data Quality Findings
 
 * All five CSV files were successfully loaded into SQLite.
@@ -138,7 +159,7 @@ sql/04_revenue_risk_analysis.sql
 * No broken relationships were found between accounts, subscriptions, feature usage, support tickets and churn events.
 * Duplicate `usage_id` values were identified in the `feature_usage` table. Since all feature usage records link correctly to valid subscription IDs, the analysis uses `subscription_id` for joins rather than relying on `usage_id` as a unique identifier.
 
-## SQL Analysis Results
+## SQL Churn Analysis Results
 
 ### 1. Overall Customer Churn Rate
 
@@ -238,7 +259,7 @@ Key patterns by plan tier:
 
 This suggests that each plan tier requires a different retention strategy. Basic users may need faster support and clearer onboarding, while Enterprise customers may need stronger feature depth, product reliability and roadmap alignment.
 
-## Key Insights
+## SQL Churn Key Insights
 
 1. The overall churn rate is **22.0%**, meaning customer retention is a clear business risk.
 2. Churn is almost equal across Basic, Pro and Enterprise plans, suggesting the issue is not limited to one pricing tier.
@@ -262,7 +283,7 @@ This shows that churn is not only a customer retention issue, but also a signifi
 
 ![Revenue-at-Risk Summary](reports/screenshots/09_revenue_at_risk_summary.png)
 
-The total revenue-at-risk from churned accounts is:
+The total revenue-at-risk from churned subscription records is:
 
 | Metric                                     |       Value |
 | ------------------------------------------ | ----------: |
@@ -342,13 +363,91 @@ This supports a targeted retention strategy focused on high-value Enterprise acc
 4. Event-acquired customers show both high churn rate and high revenue exposure.
 5. High-value churned accounts are concentrated in the Enterprise plan.
 
-## Revenue Protection Recommendations
+## Python Analysis
 
-1. Prioritise Enterprise retention because this plan contributes the largest ARR risk.
-2. Create an early-warning dashboard for high-value accounts showing churn signals, support issues and product usage decline.
-3. Review Cybersecurity and FinTech customers separately because they contribute high revenue exposure.
-4. Improve event-acquired customer onboarding to reduce both churn rate and revenue leakage.
-5. Build a customer success intervention plan for high-MRR accounts before renewal periods.
+Python was used to extend the SQL analysis by creating account-level and subscription-level analytical datasets. The Python analysis focused on product usage, support experience and churn-related behaviour.
+
+File used:
+
+```text
+python/01_churn_usage_support_analysis.ipynb
+```
+
+Python outputs saved:
+
+```text
+reports/python_charts
+reports/python_insights_summary.csv
+```
+
+### 15. Customer Count by Churn Status
+
+![Customer Count by Churn Status](reports/python_charts/01_customer_count_by_churn_status.png)
+
+The Python analysis confirms the account-level churn split:
+
+* Active accounts: 390
+* Churned accounts: 110
+* Overall churn rate: 22.0%
+
+This validates the SQL churn calculation and provides a visual summary of the customer base.
+
+### 16. Churn Rate by Industry
+
+![Churn Rate by Industry](reports/python_charts/02_churn_rate_by_industry.png)
+
+The Python chart confirms that **DevTools** customers have the highest churn rate at **30.97%**.
+
+This segment should be reviewed further because it shows a materially higher churn rate than the overall customer base.
+
+### 17. Churn Rate by Referral Source
+
+![Churn Rate by Referral Source](reports/python_charts/03_churn_rate_by_referral_source.png)
+
+The Python analysis confirms that **event-acquired customers** have the highest churn rate at **30.21%**.
+
+This suggests that customers acquired through events may require better qualification, onboarding and expectation-setting.
+
+### 18. Feature Usage: Active vs Churned Subscriptions
+
+![Feature Usage Active vs Churned](reports/python_charts/04_feature_usage_active_vs_churned.png)
+
+Feature usage levels are very similar between active and churned subscriptions.
+
+| Metric                       |        Active |       Churned |
+| ---------------------------- | ------------: | ------------: |
+| Average Usage Count          |         50.56 |         49.29 |
+| Average Usage Duration       | 3,040.11 secs | 3,032.42 secs |
+| Average Errors               |          2.85 |          2.78 |
+| Average Unique Features Used |          4.74 |          4.63 |
+| Average Beta Feature Events  |          0.51 |          0.50 |
+
+This suggests that churn is not strongly explained by low product usage alone. Customers appear to be using the product, but may still churn because of feature gaps, budget constraints, support issues or competitor alternatives.
+
+### 19. Support Experience: Active vs Churned Accounts
+
+![Support Experience Active vs Churned](reports/python_charts/05_support_experience_active_vs_churned.png)
+
+Support experience is broadly similar between active and churned accounts.
+
+| Metric                      |        Active |       Churned |
+| --------------------------- | ------------: | ------------: |
+| Average Tickets             |          4.02 |          3.93 |
+| Average Resolution Time     |   35.89 hours |   34.84 hours |
+| Average First Response Time | 88.20 minutes | 83.38 minutes |
+| Average Satisfaction Score  |          3.69 |          3.71 |
+| Average Escalations         |          0.18 |          0.22 |
+
+The main difference is that churned accounts show slightly higher escalations. This suggests that complex or unresolved support issues may matter more than total ticket volume.
+
+## Python Key Insights
+
+1. Python analysis confirms the overall **22.0% churn rate**.
+2. **DevTools** remains the highest-risk industry segment.
+3. **Event-acquired customers** remain the highest-risk acquisition source.
+4. Product usage is similar between active and churned subscriptions, so churn is not explained by low usage alone.
+5. Support experience is broadly similar, but churned accounts show slightly higher escalations.
+6. Churn is likely driven by a combination of feature fit, customer expectations, support complexity and revenue risk.
 
 ## Business Recommendations
 
@@ -358,19 +457,19 @@ DevTools customers have the highest churn rate. RavenStack should analyse featur
 
 ### 2. Strengthen onboarding for event-acquired customers
 
-Event-acquired customers churn at the highest rate. RavenStack should improve qualification, onboarding and expectation-setting for customers acquired through events.
+Event-acquired customers churn at the highest rate and show high revenue exposure. RavenStack should improve qualification, onboarding and expectation-setting for customers acquired through events.
 
-### 3. Build a targeted retention plan for 6–20 seat customers
+### 3. Prioritise Enterprise retention
+
+Enterprise customers create the largest revenue risk, with over **$11.1 million ARR at risk**. RavenStack should monitor high-MRR accounts and build early-warning indicators before renewal periods.
+
+### 4. Build a targeted retention plan for 6–20 seat customers
 
 The 6–20 seat segment has the highest churn rate by seat size. This group may need better onboarding, clearer team adoption support and stronger value communication.
 
-### 4. Address feature-related churn
+### 5. Monitor support escalations
 
-Since features are the most common churn reason, product managers should review missing feature feedback, usage patterns and competitor positioning.
-
-### 5. Improve support experience for Basic and Pro users
-
-Support is a major churn driver, especially for Basic and Pro customers. RavenStack should monitor ticket resolution time, escalation rate and satisfaction scores for these segments.
+Support volume and response time are similar across active and churned accounts, but churned accounts show slightly higher escalations. RavenStack should create escalation-risk flags for customer success teams.
 
 ## Repository Structure
 
@@ -397,27 +496,36 @@ SaaS Customer Churn Revenue Risk Analysis
 │   └── 04_revenue_risk_analysis.sql
 │
 ├── python
-│   └── load_data_to_sqlite.py
+│   ├── load_data_to_sqlite.py
+│   └── 01_churn_usage_support_analysis.ipynb
 │
 ├── powerbi
 │
 ├── reports
 │   ├── insights_summary.md
-│   └── screenshots
-│       ├── 01_overall_churn_rate.png
-│       ├── 02_churn_by_plan_tier.png
-│       ├── 03_churn_by_industry.png
-│       ├── 04_churn_by_referral_source.png
-│       ├── 05_churn_by_seat_size_group.png
-│       ├── 06_top_churn_reasons.png
-│       ├── 07_churn_reasons_by_plan_tier.png
-│       ├── 08_total_revenue_by_churn_status.png
-│       ├── 09_revenue_at_risk_summary.png
-│       ├── 10_revenue_at_risk_by_plan_tier.png
-│       ├── 11_revenue_at_risk_by_industry.png
-│       ├── 12_revenue_at_risk_by_referral_source.png
-│       ├── 13_average_revenue_by_plan_and_churn_status.png
-│       └── 14_high_value_churned_accounts.png
+│   ├── python_insights_summary.csv
+│   ├── screenshots
+│   │   ├── 01_overall_churn_rate.png
+│   │   ├── 02_churn_by_plan_tier.png
+│   │   ├── 03_churn_by_industry.png
+│   │   ├── 04_churn_by_referral_source.png
+│   │   ├── 05_churn_by_seat_size_group.png
+│   │   ├── 06_top_churn_reasons.png
+│   │   ├── 07_churn_reasons_by_plan_tier.png
+│   │   ├── 08_total_revenue_by_churn_status.png
+│   │   ├── 09_revenue_at_risk_summary.png
+│   │   ├── 10_revenue_at_risk_by_plan_tier.png
+│   │   ├── 11_revenue_at_risk_by_industry.png
+│   │   ├── 12_revenue_at_risk_by_referral_source.png
+│   │   ├── 13_average_revenue_by_plan_and_churn_status.png
+│   │   └── 14_high_value_churned_accounts.png
+│   │
+│   └── python_charts
+│       ├── 01_customer_count_by_churn_status.png
+│       ├── 02_churn_rate_by_industry.png
+│       ├── 03_churn_rate_by_referral_source.png
+│       ├── 04_feature_usage_active_vs_churned.png
+│       └── 05_support_experience_active_vs_churned.png
 │
 └── README.md
 ```
@@ -426,20 +534,19 @@ SaaS Customer Churn Revenue Risk Analysis
 
 The next stage of this project will include:
 
-* Revenue-at-risk analysis using MRR and ARR
-* Python analysis for churn, usage and support patterns
 * Power BI dashboard development
 * Final executive summary
-* CV-ready project bullets
+* Final CV-ready project bullets
 
 ## Current CV-Ready Project Description
 
-**SaaS Customer Churn & Revenue-at-Risk Analysis | SQL, Python, Power BI**
+**SaaS Customer Churn & Revenue-at-Risk Analysis | SQL, SQLite, Python, GitHub**
 
-* Built a structured SaaS churn analysis workflow using SQL, SQLite, Python and GitHub to identify high-risk customer segments and churn drivers.
+* Built a structured SaaS churn and revenue-at-risk analysis workflow using SQL, SQLite, Python and GitHub to identify high-risk customer segments and recurring revenue exposure.
 * Loaded and analysed **500 accounts**, **5,000 subscriptions**, **25,000 feature usage records**, **2,000 support tickets** and **600 churn events**.
 * Identified a **22.0% overall churn rate**, with highest churn among **DevTools customers**, **event-acquired customers** and **6–20 seat accounts**.
-* Translated SQL findings into business recommendations focused on onboarding, feature fit, support improvement and customer retention strategy.
+* Found **$1.18M monthly revenue at risk** and **$14.15M annual revenue at risk**, with Enterprise customers contributing the largest financial exposure.
+* Translated findings into business recommendations focused on onboarding, feature fit, support escalation monitoring and customer retention strategy.
 
 ## Dataset Credit
 
