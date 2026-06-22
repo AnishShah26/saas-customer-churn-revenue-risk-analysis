@@ -1,0 +1,7 @@
+analysis_area,key_finding,business_interpretation,recommended_action
+Customer churn,Overall customer churn rate is 22.0%.,Customer retention is a meaningful business risk.,Monitor churn rate monthly and segment churn by customer group.
+Industry churn,DevTools has the highest churn rate at 30.97%.,DevTools customers may require stronger feature fit and technical product depth.,Review DevTools feature usage and collect segment-specific feedback.
+Referral source churn,Event-acquired customers have the highest churn rate at 30.21%.,Event-acquired customers may need better qualification and onboarding.,Improve event-led onboarding and expectation-setting.
+Feature usage,Active and churned subscriptions show very similar product usage levels.,"Churn is not explained by low usage alone; feature gaps, pricing and support context may matter more.",Combine usage analysis with churn reasons and customer feedback.
+Support experience,"Support experience is broadly similar, but churned accounts show slightly higher escalations.",Complex or escalated support issues may matter more than total ticket volume.,Create an escalation-risk flag for customer success teams.
+Revenue risk,Churned subscriptions represent $14.15M ARR at risk.,Enterprise and high-value accounts should be prioritised for retention.,Build early-warning tracking for high-MRR and Enterprise customers.
