@@ -1,20 +1,16 @@
 # SaaS Customer Churn & Revenue-at-Risk Analysis
 
-## Project Status
-
-**Status:** Work in Progress
-**Current Stage Completed:** SQL data loading, data quality checks, churn analysis, revenue-at-risk analysis and Python analysis
-**Next Stage:** Power BI dashboard development
-
 ## Project Overview
 
-This project analyses customer churn patterns for **RavenStack**, a synthetic SaaS business dataset. The goal is to identify high-risk customer segments, understand churn drivers, quantify revenue at risk and develop business recommendations to improve customer retention.
+This project analyses customer churn and revenue-at-risk for **RavenStack**, a synthetic SaaS business dataset. The goal is to identify high-risk customer segments, understand churn drivers, quantify revenue exposure and create business recommendations to improve customer retention.
 
-The project currently uses **SQL, SQLite, Python, VS Code and Git/GitHub**. Power BI dashboard development will be added in the next stage.
+The project uses **SQL, SQLite, Python, Power BI, VS Code and Git/GitHub** to create an end-to-end analytics workflow from raw data loading to executive dashboard development.
 
 ## Business Problem
 
-RavenStack wants to understand why customers are leaving before its public launch. The key business questions are:
+RavenStack wants to understand why customers are leaving before its public launch and which customer segments create the greatest recurring revenue risk.
+
+The key business questions are:
 
 * What is the overall customer churn rate?
 * Which plan tiers have the highest churn?
@@ -22,8 +18,9 @@ RavenStack wants to understand why customers are leaving before its public launc
 * Which referral sources bring higher-churn customers?
 * Which customer seat-size groups churn the most?
 * What are the most common churn reasons?
-* How much monthly and annual revenue is at risk from churn?
+* How much monthly and annual recurring revenue is at risk?
 * How do product usage and support experience differ between active and churned customers?
+* Which segments should be prioritised for retention?
 
 ## Tools Used
 
@@ -34,7 +31,7 @@ RavenStack wants to understand why customers are leaving before its public launc
 * **Python** – CSV loading, analytical datasets, churn visualisations and insight summary
 * **Pandas** – data manipulation and aggregation
 * **Matplotlib** – Python chart outputs
-* **Power BI** – dashboard development planned for the next stage
+* **Power BI** – executive dashboard development
 
 ## Dataset
 
@@ -71,11 +68,11 @@ accounts.account_id
 
 ### 1. Project Setup
 
-The project was structured in VS Code with separate folders for raw data, SQL scripts, Python scripts, reports, screenshots and future Power BI work.
+The project was structured in VS Code with separate folders for raw data, cleaned data, SQL scripts, Python scripts, Power BI files, reports and screenshots.
 
 ### 2. Data Loading
 
-A Python script was used to load the CSV files into a local SQLite database.
+A Python script was used to load the raw CSV files into a local SQLite database.
 
 File used:
 
@@ -149,6 +146,22 @@ Python outputs saved:
 ```text
 reports/python_charts
 reports/python_insights_summary.csv
+```
+
+### 7. Power BI Dashboard
+
+Power BI was used to create an executive dashboard showing customer churn, revenue-at-risk and key retention priorities.
+
+Power BI file:
+
+```text
+powerbi/saas_churn_revenue_dashboard.pbix
+```
+
+Dashboard screenshot:
+
+```text
+reports/powerbi_dashboard_executive_summary.png
 ```
 
 ## Data Quality Findings
@@ -449,6 +462,24 @@ The main difference is that churned accounts show slightly higher escalations. T
 5. Support experience is broadly similar, but churned accounts show slightly higher escalations.
 6. Churn is likely driven by a combination of feature fit, customer expectations, support complexity and revenue risk.
 
+## Power BI Dashboard
+
+The Power BI dashboard was designed as an executive summary view for business stakeholders. It highlights customer churn, revenue-at-risk and key retention priorities.
+
+![Power BI Executive Dashboard](reports/powerbi_dashboard_executive_summary.png)
+
+The dashboard includes:
+
+* Total customers
+* Churned customers
+* Customer churn rate
+* ARR at risk
+* Churn rate by industry
+* Revenue at risk by plan tier
+* Churn rate by referral source
+* Churn rate by seat size group
+* Key business insights
+
 ## Business Recommendations
 
 ### 1. Improve feature fit for DevTools customers
@@ -485,6 +516,11 @@ SaaS Customer Churn Revenue Risk Analysis
 │   └── ravenstack_churn_events.csv
 │
 ├── data_cleaned
+│   ├── account_analysis.csv
+│   ├── usage_analysis.csv
+│   ├── support_analysis.csv
+│   ├── python_insights_summary.csv
+│   └── subscription_revenue_analysis.csv
 │
 ├── database
 │   └── ravenstack.db
@@ -500,10 +536,12 @@ SaaS Customer Churn Revenue Risk Analysis
 │   └── 01_churn_usage_support_analysis.ipynb
 │
 ├── powerbi
+│   └── saas_churn_revenue_dashboard.pbix
 │
 ├── reports
 │   ├── insights_summary.md
 │   ├── python_insights_summary.csv
+│   ├── powerbi_dashboard_executive_summary.png
 │   ├── screenshots
 │   │   ├── 01_overall_churn_rate.png
 │   │   ├── 02_churn_by_plan_tier.png
@@ -530,23 +568,16 @@ SaaS Customer Churn Revenue Risk Analysis
 └── README.md
 ```
 
-## Next Steps
+## Final CV-Ready Project Description
 
-The next stage of this project will include:
+**SaaS Customer Churn & Revenue-at-Risk Analysis | SQL, Python, Power BI, GitHub**
 
-* Power BI dashboard development
-* Final executive summary
-* Final CV-ready project bullets
-
-## Current CV-Ready Project Description
-
-**SaaS Customer Churn & Revenue-at-Risk Analysis | SQL, SQLite, Python, GitHub**
-
-* Built a structured SaaS churn and revenue-at-risk analysis workflow using SQL, SQLite, Python and GitHub to identify high-risk customer segments and recurring revenue exposure.
-* Loaded and analysed **500 accounts**, **5,000 subscriptions**, **25,000 feature usage records**, **2,000 support tickets** and **600 churn events**.
-* Identified a **22.0% overall churn rate**, with highest churn among **DevTools customers**, **event-acquired customers** and **6–20 seat accounts**.
-* Found **$1.18M monthly revenue at risk** and **$14.15M annual revenue at risk**, with Enterprise customers contributing the largest financial exposure.
-* Translated findings into business recommendations focused on onboarding, feature fit, support escalation monitoring and customer retention strategy.
+* Built an end-to-end SaaS churn and revenue-at-risk analysis project using **SQL, SQLite, Python and Power BI** to identify high-risk customer segments and recurring revenue exposure.
+* Loaded, cleaned and analysed **500 accounts**, **5,000 subscriptions**, **25,000 feature usage records**, **2,000 support tickets** and **600 churn events** from a multi-table relational dataset.
+* Identified a **22.0% overall churn rate**, with the highest churn among **DevTools customers**, **event-acquired customers** and **6–20 seat accounts**.
+* Quantified **$1.18M monthly revenue at risk** and **$14.15M annual revenue at risk**, with Enterprise customers contributing the largest financial exposure.
+* Created Python analysis outputs and a Power BI executive dashboard to visualise churn drivers, revenue exposure and retention priorities for business decision-making.
+* Translated findings into business recommendations focused on onboarding, feature fit, support escalation monitoring and Enterprise customer retention.
 
 ## Dataset Credit
 
